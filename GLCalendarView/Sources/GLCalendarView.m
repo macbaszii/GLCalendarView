@@ -286,9 +286,20 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
                                                            endDate:selectedDate];
             }
             
+            newRange.backgroundColor = self.rangeUnderEdit.backgroundColor;
+            
             [self removeRange:self.rangeUnderEdit];
             [self addRange:newRange];
             [self beginToEditRange:newRange];
+            
+            BOOL canUpdate = [self.delegate calenderView:self
+                                          canUpdateRange:self.rangeUnderEdit
+                                             toBeginDate:newRange.beginDate
+                                                 endDate:newRange.endDate];
+            
+            if (canUpdate) {
+                [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date endDate:self.rangeUnderEdit.endDate];
+            }
         } else {
             BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date];
             if (canAdd) {

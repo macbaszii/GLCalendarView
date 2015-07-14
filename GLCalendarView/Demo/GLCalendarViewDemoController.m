@@ -33,8 +33,6 @@
 {
     [super viewWillAppear:YES];
     
-    NSDate *today = [NSDate date];
-        
     [self.calendarView reload];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
@@ -43,10 +41,10 @@
 
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate {
     
-//    NSDate *today = [NSDate date];
-//    if ([beginDate isEarlierThan:today]) {
-//        return NO;
-//    }
+    NSDate *today = [NSDate date];
+    if ([GLDateUtils date:beginDate isEarlierThan:today]) {
+        return NO;
+    }
     
     return YES;
 }
@@ -54,10 +52,10 @@
 - (BOOL)calenderView:(GLCalendarView *)calendarView canUpdateRange:(GLCalendarDateRange *)range
          toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     
-//    NSDate *today = [NSDate date];
-//    if ([beginDate isEarlierThan:today]) {
-//        return NO;
-//    }
+    NSDate *today = [NSDate date];
+    if ([GLDateUtils date:beginDate isEarlierThan:today]) {
+        return NO;
+    }
     return YES;
 }
 
@@ -80,6 +78,7 @@
                                      andEndDate:(NSDate *)endDate {
     GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:startDate endDate:endDate];
     range.editable = YES;
+    range.backgroundColor = [UIColor blueColor];
     
     return range;
 }
