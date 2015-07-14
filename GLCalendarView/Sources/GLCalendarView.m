@@ -296,8 +296,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
                 [self removeRange:self.rangeUnderEdit];
                 [self addRange:newRange];
                 [self beginToEditRange:newRange];
-
-                [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date endDate:self.rangeUnderEdit.endDate];
+                
+                [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit
+                                toBeginDate:date endDate:self.rangeUnderEdit.endDate];
             }
         } else {
             BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date];
@@ -494,6 +495,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         } else {
             [self reloadFromBeginDate:date toDate:originalEndDate];
         }
+        
         [self showMagnifierAboveDate:self.rangeUnderEdit.endDate];
         [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date];
     }
@@ -585,12 +587,19 @@ static NSDate *today;
     for (NSInteger i = beginIndex; i <= endIndex; i++) {
         [indexPaths addObject:[NSIndexPath indexPathForItem:i inSection:0]];
     }
+    
+    NSMutableSet *allIndexPaths = [NSMutableSet setWithArray:indexPaths];
+    NSSet *visibleIndexPaths = [NSSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+    [allIndexPaths intersectSet:visibleIndexPaths];
+    
+    NSArray *interectedIndexPaths = [allIndexPaths allObjects];
+    
     // prevent crash: too many update animations on one view - limit is 31 in flight at a time
     if (indexPaths.count > 30) {
         [self.collectionView reloadData];
     } else {
         [UIView performWithoutAnimation:^{
-            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
+            [self.collectionView reloadItemsAtIndexPaths:interectedIndexPaths];
         }];
     }
 }

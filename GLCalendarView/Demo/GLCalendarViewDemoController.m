@@ -33,9 +33,13 @@
 {
     [super viewWillAppear:YES];
     
+    NSDate *today = [NSDate date];
+    self.calendarView.firstDate = today;
+    self.calendarView.lastDate = [GLDateUtils dateByAddingMonths:24 toDate:today];
+    
     [self.calendarView reload];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
+        [self.calendarView scrollToDate:self.calendarView.firstDate animated:NO];
     });
 }
 
