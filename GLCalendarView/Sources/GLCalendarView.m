@@ -595,13 +595,13 @@ static NSDate *today;
     NSArray *interectedIndexPaths = [allIndexPaths allObjects];
     
     // prevent crash: too many update animations on one view - limit is 31 in flight at a time
-    if (indexPaths.count > 30) {
-        [self.collectionView reloadData];
-    } else {
-        [UIView performWithoutAnimation:^{
-            [self.collectionView reloadItemsAtIndexPaths:interectedIndexPaths];
-        }];
-    }
+//    if (indexPaths.count > 30) {
+//        [self.collectionView reloadData];
+//    } else {
+    [UIView performWithoutAnimation:^{
+        [self.collectionView reloadItemsAtIndexPaths:interectedIndexPaths];
+    }];
+//    }
 }
 
 - (NSIndexPath *)indexPathForDate:(NSDate *)date
