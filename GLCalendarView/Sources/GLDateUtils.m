@@ -138,4 +138,32 @@ static NSArray *months;
     return [months objectAtIndex:(month - 1)];
 }
 
++ (BOOL)date:(NSDate *)date1 isEarlierThan:(NSDate *)date2 {
+    if (date1.timeIntervalSince1970 < date2.timeIntervalSince1970) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)date:(NSDate *)date1 isLaterThan:(NSDate *)date2 {
+    if (date1.timeIntervalSince1970 > date2.timeIntervalSince1970) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)date:(NSDate *)date1 isEarlierThanOrEqualTo:(NSDate *)date2 {
+    if (date1.timeIntervalSince1970 <= date2.timeIntervalSince1970) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)date:(NSDate *)date1 isLaterThanOrEqualTo:(NSDate *)date2 {
+    if (date1.timeIntervalSince1970 >= date2.timeIntervalSince1970) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

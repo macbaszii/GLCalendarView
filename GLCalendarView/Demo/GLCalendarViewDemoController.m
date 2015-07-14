@@ -34,61 +34,66 @@
     [super viewWillAppear:YES];
     
     NSDate *today = [NSDate date];
-    
-    NSDate *beginDate1 = [GLDateUtils dateByAddingDays:-32 toDate:today];
-    NSDate *endDate1 = [GLDateUtils dateByAddingDays:-26 toDate:today];
-    GLCalendarDateRange *range1 = [GLCalendarDateRange rangeWithBeginDate:beginDate1 endDate:endDate1];
-    range1.backgroundColor = UIColorFromRGB(0x79a9cd);
-    range1.editable = YES;
-    
-    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:-6 toDate:today];
-    NSDate *endDate2 = [GLDateUtils dateByAddingDays:-3 toDate:today];
-    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
-    range2.backgroundColor = UIColorFromRGB(0x79a9cd);
-    range2.editable = YES;
-
-    self.calendarView.ranges = [@[range1, range2] mutableCopy];
-    
+        
     [self.calendarView reload];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
     });
 }
 
-- (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate
-{
+- (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate {
+    
+//    NSDate *today = [NSDate date];
+//    if ([beginDate isEarlierThan:today]) {
+//        return NO;
+//    }
+    
     return YES;
 }
 
-- (GLCalendarDateRange *)calenderView:(GLCalendarView *)calendarView rangeToAddWithBeginDate:(NSDate *)beginDate
-{
-    NSDate* endDate = [GLDateUtils dateByAddingDays:3 toDate:beginDate];
-    GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
-    range.backgroundColor = UIColorFromRGB(0x80ae99);
-    range.editable = YES;
+- (BOOL)calenderView:(GLCalendarView *)calendarView canUpdateRange:(GLCalendarDateRange *)range
+         toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
+    
+//    NSDate *today = [NSDate date];
+//    if ([beginDate isEarlierThan:today]) {
+//        return NO;
+//    }
+    return YES;
+}
+
+- (GLCalendarDateRange *)calenderView:(GLCalendarView *)calendarView rangeToAddWithBeginDate:(NSDate *)beginDate {
+    if (self.calendarView.ranges.count == 1) {
+        [self.calendarView.ranges removeAllObjects];
+        [self.calendarView reload];
+    }
+    
+    NSDate *endDate = beginDate;
+    GLCalendarDateRange *range = [self dateRangeWithStartDate:beginDate
+                                                   andEndDate:endDate];
+    
+    [self.calendarView beginToEditRange:range];
+    
     return range;
 }
 
-- (void)calenderView:(GLCalendarView *)calendarView beginToEditRange:(GLCalendarDateRange *)range
-{
-    NSLog(@"begin to edit range: %@", range);
+- (GLCalendarDateRange *)dateRangeWithStartDate:(NSDate *)startDate
+                                     andEndDate:(NSDate *)endDate {
+    GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:startDate endDate:endDate];
+    range.editable = YES;
+    
+    return range;
+}
+
+- (void)calenderView:(GLCalendarView *)calendarView beginToEditRange:(GLCalendarDateRange *)range {
     self.rangeUnderEdit = range;
 }
 
-- (void)calenderView:(GLCalendarView *)calendarView finishEditRange:(GLCalendarDateRange *)range continueEditing:(BOOL)continueEditing
-{
-    NSLog(@"finish edit range: %@", range);
+- (void)calenderView:(GLCalendarView *)calendarView didUpdateRange:(GLCalendarDateRange *)range
+         toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
+}
+
+- (void)calenderView:(GLCalendarView *)calendarView finishEditRange:(GLCalendarDateRange *)range continueEditing:(BOOL)continueEditing {
     self.rangeUnderEdit = nil;
-}
-
-- (BOOL)calenderView:(GLCalendarView *)calendarView canUpdateRange:(GLCalendarDateRange *)range toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate
-{
-    return YES;
-}
-
-- (void)calenderView:(GLCalendarView *)calendarView didUpdateRange:(GLCalendarDateRange *)range toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate
-{
-    NSLog(@"did update range: %@", range);
 }
 
 - (IBAction)deleteButtonPressed:(id)sender

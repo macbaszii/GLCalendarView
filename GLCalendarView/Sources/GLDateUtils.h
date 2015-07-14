@@ -22,4 +22,10 @@
 + (NSDate *)maxForDate:(NSDate *)date1 andDate:(NSDate *)date2;
 + (NSDate *)minForDate:(NSDate *)date1 andDate:(NSDate *)date2;
 + (NSString *)monthText:(NSInteger)month;
+
++ (BOOL)date:(NSDate *)date1 isEarlierThan:(NSDate *)date2;
++ (BOOL)date:(NSDate *)date1 isLaterThan:(NSDate *)date2;
++ (BOOL)date:(NSDate *)date1 isEarlierThanOrEqualTo:(NSDate *)date2;
++ (BOOL)date:(NSDate *)date1 isLaterThanOrEqualTo:(NSDate *)date2;
+
 @end

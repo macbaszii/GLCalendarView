@@ -275,7 +275,20 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         [self beginToEditRange:range];
     } else {
         if (self.rangeUnderEdit) {
-            [self finishEditRange:self.rangeUnderEdit continueEditing:NO];
+            NSDate *selectedDate = [self dateForCellAtIndexPath:indexPath];
+            GLCalendarDateRange *newRange;
+            if ([GLDateUtils date:selectedDate
+                    isEarlierThan:self.rangeUnderEdit.endDate]) {
+                 newRange = [GLCalendarDateRange rangeWithBeginDate:selectedDate
+                                                            endDate:self.rangeUnderEdit.endDate];
+            } else {
+                newRange = [GLCalendarDateRange rangeWithBeginDate:self.rangeUnderEdit.beginDate
+                                                           endDate:selectedDate];
+            }
+            
+            [self removeRange:self.rangeUnderEdit];
+            [self addRange:newRange];
+            [self beginToEditRange:newRange];
         } else {
             BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date];
             if (canAdd) {
