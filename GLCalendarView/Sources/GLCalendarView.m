@@ -298,7 +298,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
                 [self beginToEditRange:newRange];
                 
                 [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit
-                                toBeginDate:date endDate:self.rangeUnderEdit.endDate];
+                                toBeginDate:self.rangeUnderEdit.beginDate
+                                    endDate:self.rangeUnderEdit.endDate];
             }
         } else {
             BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date];
